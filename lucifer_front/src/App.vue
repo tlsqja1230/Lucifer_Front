@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <!-- 헤더 bar 컴포넌트 -->
     <headerBar/>
-    <v-content>
+    <v-content class="mx-auto">
       <router-view/>
     </v-content>
   </v-app>
