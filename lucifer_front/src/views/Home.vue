@@ -47,6 +47,7 @@ export default {
     next()
   },
   created() {
+    this.excuteApi()
   },
   mounted() {
   },
@@ -61,6 +62,12 @@ export default {
     },
     deleteTodo(index){
       this.todoList.splice(index,1);
+    },
+    excuteApi(){
+      var param = {}
+      this.$http.get('https://jsonplaceholder.typicode.com/todos/1',param).then(response=>{
+        console.log(response);
+      })
     }
   },
 }
