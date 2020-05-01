@@ -109,6 +109,7 @@
             </v-avatar>
         </v-btn>
     </v-app-bar>
+    <slot></slot>
   </div>
 </template>
 

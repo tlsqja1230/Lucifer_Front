@@ -1,5 +1,7 @@
 <template>
-    <component :is="layout"></component>
+    <component :is="layout">
+      <slot></slot>
+    </component>
 </template>
 
 <script>
