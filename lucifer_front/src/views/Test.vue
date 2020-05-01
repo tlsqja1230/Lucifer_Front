@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>todo list</h1>
     <v-text-field
         flat
         label="할일 추가"
@@ -20,12 +21,33 @@
       </template>
     </v-simple-table>
     <p>할일 총 {{todoCnt}} 건</p>
+    <br/>
+    <h1>api 테스트</h1>
+    <v-text-field
+        flat
+        label="게시글 제목"
+        class="hidden-sm-and-down"
+        v-model="title"
+    />
+    <v-text-field
+        flat
+        label="게시글 작성자"
+        class="hidden-sm-and-down"
+        v-model="author"
+    />
+    <v-text-field
+        flat
+        label="게시글 내용"
+        class="hidden-sm-and-down"
+        v-model="content"
+    />
+    <v-btn small color="primary" @click="excuteApi()">call api</v-btn>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Home',
+  name: 'Test',
   components: {
   },
   props: {
@@ -40,14 +62,17 @@ export default {
   data(){
     return {
       todoList:[],
-      todoVal: ''
+      todoVal: '',
+      title: '',
+      author: '',
+      content: '',
+      apiResult: {}
     }
   },
   beforeRouteEnter (to, from, next) {
     next()
   },
   created() {
-    this.excuteApi()
   },
   mounted() {
   },
@@ -63,10 +88,18 @@ export default {
     deleteTodo(index){
       this.todoList.splice(index,1);
     },
-    excuteApi(){
-      var param = {}
-      this.$http.get('https://jsonplaceholder.typicode.com/todos/1',param).then(response=>{
-        console.log(response);
+    async excuteApi(){
+      var param = {
+        title : this.title,
+        author : this.author,
+        content : this.content
+      }
+
+      await this.$http.post('/test/posts',param).then(response=>{
+        console.log(response)
+        this.title = ''
+        this.author = ''
+        this.content = ''
       })
     }
   },
