@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Test from '../views/Test.vue'
+import Guide from '../views/Guide.vue'
 
 Vue.use(VueRouter)
 
   const routes = [
   {
     path: '/',
-    name: 'Test',
-    component: Test
+    name: 'Guide',
+    component: Guide,
+    meta: {layout : 'DefaultLayout'}
   },
   // {
   //   path: '/about',

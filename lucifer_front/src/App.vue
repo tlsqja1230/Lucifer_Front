@@ -1,26 +1,16 @@
 <template>
-  <v-app id="inspire">
-    <!-- 헤더 bar 컴포넌트 -->
-    <headerBar/>
-    <v-content class="mx-auto">
-      <router-view/>
-    </v-content>
+  <v-app>
+    <SetLayout>
+      <router-view></router-view>
+    </SetLayout>
   </v-app>
 </template>
 
 <script>
-  import headerBar from '@/components/headerBar.vue'
+  import SetLayout from '@/components/layouts/SetLayout.vue'
   export default {
     components:{
-      headerBar
-    },
-    props: {
-      source: String,
-    },
-    data(){
-      return {
-        dialog: false,
-      }
+      SetLayout
     }
   }
 </script>

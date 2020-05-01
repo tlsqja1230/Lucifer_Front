@@ -22,7 +22,7 @@
     </v-simple-table>
     <p>할일 총 {{todoCnt}} 건</p>
     <br/>
-    <h1>api 테스트</h1>
+    <h1>api guide</h1>
     <v-text-field
         flat
         label="게시글 제목"
@@ -47,7 +47,7 @@
 
 <script>
 export default {
-  name: 'Test',
+  name: 'Guide',
   components: {
   },
   props: {
