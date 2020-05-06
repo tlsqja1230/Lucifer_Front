@@ -1,91 +1,95 @@
 <template>
-  <div>
-    <v-container grid-list-xl fluid>
-      <v-layout row wrap>
-        <v-flex lg3 sm6 xs12>
-          <h1>todo list</h1>
-          <v-text-field
-            flat
-            label="할일 추가"
-            class="hidden-sm-and-down"
-            v-model="todoVal"
-            @keyup.enter="insertTodo()"
-          />
-          <v-simple-table>
-            <template v-slot:default>
-              <tbody>
-                <tr v-for="(item, index) in todoList" :key="index">
-                  <td>{{ item }}</td>
-                  <div class="my-2">
-                    <v-btn small color="error" @click="deleteTodo(index)">삭제</v-btn>
-                  </div>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
-          <p>할일 총 {{todoCnt}} 건</p>
-        </v-flex>
-        <v-flex lg3 sm6 xs12>
-          <h1>api test</h1>
-          <v-text-field
-            flat
-            label="게시글 제목"
-            class="hidden-sm-and-down"
-            v-model="title"
-          />
-          <v-text-field
-            flat
-            label="게시글 작성자"
-            class="hidden-sm-and-down"
-            v-model="author"
-          />
-          <v-text-field
-            flat
-            label="게시글 내용"
-            class="hidden-sm-and-down"
-            v-model="content"
-          />
-          <v-btn small color="primary" @click="excuteApi()">call api</v-btn>
-        </v-flex>
-        <v-flex lg3 sm6 xs12>
-          <h1>modal</h1>
-          <v-text-field
-            flat
-            label="modal title"
-            class="hidden-sm-and-down"
-            v-model="modalTitle"
-          />
-          <v-text-field
-            flat
-            label="modal contents"
-            class="hidden-sm-and-down"
-            v-model="modalContents"
-          />
-          <v-btn small color="primary" @click="openModal()">open modal</v-btn>
-          <Modal @openModal="openModal" :isOpen="isOpen" :title="modalTitle" :contents="modalContents"></Modal>
-        </v-flex>
-        <v-flex lg3 sm6 xs12>
-          <h1>socket</h1>
-          <v-text-field
-            flat
-            label="serverURL"
-            class="hidden-sm-and-down"
-            v-model="serverURL"
-          />
-          <v-btn small color="primary" @click="socketConnect()">connect socket</v-btn>
-          <v-textarea :value="recvList.length > 0? JSON.stringify(recvList) : ''" readonly></v-textarea>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </div>
+  <v-container grid-list-xl fluid>
+    <v-layout row wrap>
+      <v-flex lg3 sm6 xs12>
+        <h1>todo list</h1>
+        <v-text-field
+          flat
+          label="할일 추가"
+          class="hidden-sm-and-down"
+          v-model="todoVal"
+          @keyup.enter="insertTodo()"
+        />
+        <v-simple-table>
+          <template v-slot:default>
+            <tbody>
+              <tr v-for="(item, index) in todoList" :key="index">
+                <td>{{ item }}</td>
+                <div class="my-2">
+                  <v-btn small color="error" @click="deleteTodo(index)">삭제</v-btn>
+                </div>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+        <p>할일 총 {{todoCnt}} 건</p>
+      </v-flex>
+      <v-flex lg3 sm6 xs12>
+        <h1>api test</h1>
+        <v-text-field
+          flat
+          label="게시글 제목"
+          class="hidden-sm-and-down"
+          v-model="title"
+        />
+        <v-text-field
+          flat
+          label="게시글 작성자"
+          class="hidden-sm-and-down"
+          v-model="author"
+        />
+        <v-text-field
+          flat
+          label="게시글 내용"
+          class="hidden-sm-and-down"
+          v-model="content"
+        />
+        <v-btn small color="primary" @click="excuteApi()">call api</v-btn>
+      </v-flex>
+      <v-flex lg3 sm6 xs12>
+        <h1>modal</h1>
+        <v-text-field
+          flat
+          label="modal title"
+          class="hidden-sm-and-down"
+          v-model="modalTitle"
+        />
+        <v-text-field
+          flat
+          label="modal contents"
+          class="hidden-sm-and-down"
+          v-model="modalContents"
+        />
+        <v-btn small color="primary" @click="openModal()">open modal</v-btn>
+        <Modal @openModal="openModal" :isOpen="isOpen" :title="modalTitle" :contents="modalContents"></Modal>
+      </v-flex>
+      <v-flex lg3 sm6 xs12>
+        <h1>socket</h1>
+        <v-text-field
+          flat
+          label="serverURL"
+          class="hidden-sm-and-down"
+          v-model="serverURL"
+        />
+        <v-btn small color="primary" @click="socketConnect()">connect socket</v-btn>
+        <v-textarea :value="recvList.length > 0? JSON.stringify(recvList) : ''" readonly></v-textarea>
+      </v-flex>
+      <v-flex lg6 sm6 xs12>
+        <h1>apexchart</h1>
+        <chart :series="recvList"></chart>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 import Modal from '@/components/common/Modal.vue'
+import chart from '@/components/common/chart.vue'
 export default {
   name: 'Guide',
   components: {
-    Modal
+    Modal,
+    chart
   },
   props: {
   },

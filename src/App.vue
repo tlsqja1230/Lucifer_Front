@@ -1,13 +1,7 @@
 <template>
-  <v-app>
-    <SetLayout>
-      <div class="page-wrapper">
-        <v-content>
-          <router-view></router-view>
-        </v-content>
-      </div>
-    </SetLayout>
-  </v-app>
+  <SetLayout>
+    <router-view></router-view>
+  </SetLayout>
 </template>
 
 <script>
@@ -18,8 +12,3 @@
     }
   }
 </script>
-<style scoped>
-.page-wrapper {
-  min-height: calc(100vh - 64px - 50px - 81px);
-}
-</style>

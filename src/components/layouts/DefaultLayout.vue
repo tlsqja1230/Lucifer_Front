@@ -1,5 +1,5 @@
 <template>
-  <div>
+<v-app id="inspire">
     <!-- 사이드 네비게이션 영역 -->
     <v-navigation-drawer
         v-model="drawer"
@@ -13,12 +13,12 @@
                     :key="item.heading"
                     align="center"
                 >
-                <v-col cols="6">
-                    <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
-                </v-col>
-                <v-col cols="6" class="text-center">
-                    <a href="#!" class="body-2 black--text">EDIT</a>
-                </v-col>
+                    <v-col cols="6">
+                        <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
+                    </v-col>
+                    <v-col cols="6" class="text-center">
+                        <a href="#!" class="body-2 black--text">EDIT</a>
+                    </v-col>
                 </v-row>
                 <v-list-group
                     v-else-if="item.children"
@@ -53,15 +53,16 @@
                 v-else
                 :key="item.text"
                 link
+                @click="clickSideMenu(item.name)"
                 >
-                <v-list-item-action>
-                    <v-icon>{{ item.icon }}</v-icon>
-                </v-list-item-action>
-                <v-list-item-content>
-                    <v-list-item-title>
-                    {{ item.text }}
-                    </v-list-item-title>
-                </v-list-item-content>
+                    <v-list-item-action>
+                        <v-icon>{{ item.icon }}</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>
+                        {{ item.text }}
+                        </v-list-item-title>
+                    </v-list-item-content>
                 </v-list-item>
             </template>
         </v-list>
@@ -109,8 +110,11 @@
             </v-avatar>
         </v-btn>
     </v-app-bar>
-    <slot></slot>
-  </div>
+    <!-- 컨텐츠 영역 -->
+    <v-content>
+        <slot></slot>
+    </v-content>
+</v-app>
 </template>
 
 <script>
@@ -124,8 +128,8 @@
       return {
         drawer: false,
         items: [
-          { icon: 'mdi-contacts', text: 'Contacts' },
-          { icon: 'mdi-history', text: 'Frequently contacted' },
+          { icon: 'mdi-contacts', text: 'Dashboard', name: 'Dashboard' },
+          { icon: 'mdi-history', text: 'Guide', name: 'Guide' },
           { icon: 'mdi-content-copy', text: 'Duplicates' },
           {
             icon: 'mdi-chevron-up',
@@ -156,6 +160,11 @@
           { icon: 'mdi-keyboard', text: 'Go to the old version' },
         ],
       }
-    }
+    },
+    methods: {
+        clickSideMenu(name){
+            this.$router.push({name: name, params: {}})
+        }
+    },
   }
 </script>
