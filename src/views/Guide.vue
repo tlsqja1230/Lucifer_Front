@@ -47,23 +47,6 @@
         <v-btn small color="primary" @click="excuteApi()">call api</v-btn>
       </v-flex>
       <v-flex lg3 sm6 xs12>
-        <h1>modal</h1>
-        <v-text-field
-          flat
-          label="modal title"
-          class="hidden-sm-and-down"
-          v-model="modalTitle"
-        />
-        <v-text-field
-          flat
-          label="modal contents"
-          class="hidden-sm-and-down"
-          v-model="modalContents"
-        />
-        <v-btn small color="primary" @click="openModal()">open modal</v-btn>
-        <Modal @openModal="openModal" :isOpen="isOpen" :title="modalTitle" :contents="modalContents"></Modal>
-      </v-flex>
-      <v-flex lg3 sm6 xs12>
         <h1>socket</h1>
         <v-text-field
           flat
@@ -83,12 +66,10 @@
 </template>
 
 <script>
-import Modal from '@/components/common/Modal.vue'
 import chart from '@/components/common/chart.vue'
 export default {
   name: 'Guide',
   components: {
-    Modal,
     chart
   },
   props: {
@@ -112,10 +93,6 @@ export default {
       content: '',
       apiResult: {},
       isOpen: false,
-
-      //modal
-      modalTitle: '',
-      modalContents: '',
 
       //socket
       serverURL: '',
@@ -154,9 +131,6 @@ export default {
         this.author = ''
         this.content = ''
       })
-    },
-    openModal(){
-      this.isOpen = !this.isOpen
     },
     socketConnect() {
       let socket = new this.$sockjs(this.serverURL);
