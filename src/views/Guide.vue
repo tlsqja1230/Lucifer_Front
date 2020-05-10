@@ -24,29 +24,55 @@
         </v-simple-table>
         <p>할일 총 {{todoCnt}} 건</p>
       </v-flex>
-      <v-flex lg3 sm6 xs12>
+      <v-flex lg6 sm6 xs12>
         <h1>api test</h1>
-        <v-text-field
-          flat
-          label="게시글 제목"
-          class="hidden-sm-and-down"
-          v-model="title"
-        />
-        <v-text-field
-          flat
-          label="게시글 작성자"
-          class="hidden-sm-and-down"
-          v-model="author"
-        />
-        <v-text-field
-          flat
-          label="게시글 내용"
-          class="hidden-sm-and-down"
-          v-model="content"
-        />
-        <v-btn small color="primary" @click="excuteApi()">call api</v-btn>
+        <v-card
+          outlined
+          class="ma-2 pa-3"
+        >
+          <div>* http://ec2-15-165-126-152.ap-northeast-2.compute.amazonaws.com:8080{{apiUrl}}</div>
+          <v-text-field
+            flat
+            label="url입력 ex) /api/test"
+            class="hidden-sm-and-down"
+            style="width:300px;"
+            v-model="apiUrl"
+          />
+          <div class="mt-7">
+            * Request JSON
+          </div>
+          <v-col cols="12" md="12">
+            <v-textarea
+              solo
+              name="input-7-4"
+              label='ex) { "name" : "홍길동", "age" : "20" }'
+              v-model="apiJson"
+            ></v-textarea>
+          </v-col>
+        </v-card>
+        <v-card
+          outlined
+          class="ma-2"
+        >
+          <v-list-item>
+            <v-list-item-content>
+              <div class="overline mb-4">result</div>
+              <v-col cols="12" md="12">
+                <v-textarea
+                  solo
+                  name="input-7-4"
+                  v-model="apiResult"
+                  readonly
+                ></v-textarea>
+              </v-col>
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+        <div style="margin-top:10px;">
+          <v-btn small color="primary" @click="excuteApi()">call api</v-btn>
+        </div>
       </v-flex>
-      <v-flex lg3 sm6 xs12>
+      <v-flex lg5 sm6 xs12>
         <h1>socket</h1>
         <v-text-field
           flat
@@ -59,18 +85,18 @@
       </v-flex>
       <v-flex lg6 sm6 xs12>
         <h1>apexchart</h1>
-        <chart :series="recvList"></chart>
+        <ScatterChart :series="recvList"></ScatterChart>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-import chart from '@/components/common/chart.vue'
+import ScatterChart from '@/components/common/ScatterChart.vue'
 export default {
   name: 'Guide',
   components: {
-    chart
+    ScatterChart
   },
   props: {
   },
@@ -88,14 +114,12 @@ export default {
       todoVal: '',
 
       //api
-      title: '',
-      author: '',
-      content: '',
-      apiResult: {},
-      isOpen: false,
+      apiUrl: '',
+      apiJson: '',
+      apiResult: '',
 
       //socket
-      serverURL: '',
+      serverURL: 'http://ec2-15-165-126-152.ap-northeast-2.compute.amazonaws.com:8080/websocket',
       recvList: []
     }
   },
@@ -119,18 +143,14 @@ export default {
       this.todoList.splice(index,1);
     },
     async excuteApi(){
-      let param = {
-        title : this.title,
-        author : this.author,
-        content : this.content
+      try {
+        let param = JSON.parse(this.apiJson)
+        await this.$http.post(this.apiUrl, param).then(response=>{
+          this.apiResult = response
+        })
+      } catch (error) {
+        this.apiResult = error
       }
-
-      await this.$http.post('/test/posts',param).then(response=>{
-        console.log(response)
-        this.title = ''
-        this.author = ''
-        this.content = ''
-      })
     },
     socketConnect() {
       let socket = new this.$sockjs(this.serverURL);

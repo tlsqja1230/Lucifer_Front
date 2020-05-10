@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Guide from '../views/Guide.vue'
 import Dashboard from '../views/Dashboard.vue'
 
 Vue.use(VueRouter)
@@ -7,14 +8,14 @@ Vue.use(VueRouter)
   const routes = [
   {
     path: '/',
-    name: 'Dashboard',
-    component: Dashboard,
+    name: 'Guide',
+    component: Guide,
     meta: {layout : 'DefaultLayout'}
   },
   {
-    path: '/guide',
-    name: 'Guide',
-    component: () => import(/* webpackChunkName: "guide" */ '../views/Guide.vue'),
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard,
     meta: {layout : 'DefaultLayout'}
   }
 ]

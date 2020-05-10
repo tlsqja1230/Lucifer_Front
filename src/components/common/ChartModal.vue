@@ -13,7 +13,7 @@
                 <v-select
                   :items="itemList"
                   label="Chart*"
-                  v-model="chart"
+                  v-model="chartName"
                   required
                 ></v-select>
               </v-col>
@@ -67,7 +67,7 @@
           {id:'ERROR RATE', name: 'ERROR RATE'},
           {id:'ACTIVE SERVICE', name: 'ACTIVE SERVICE'},
         ],
-        chart: '',
+        chartName: '',
         width: 0,
         height: 0
       }
@@ -75,10 +75,15 @@
     methods: {
       onClickBtn(type){
         if(type === 'save'){
-          this.$emit('modalResult',{chart:this.chart, width:this.width, height:this.height})
+          let param = {
+            chartName: this.chartName,
+            width: this.width,
+            height: this.height
+          }
+          this.$emit('modalResult',param)
         }
         // 초기화
-        this.chart = ''
+        this.chartName = ''
         this.width = 0
         this.height = 0
         // modal닫기
