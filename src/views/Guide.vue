@@ -6,7 +6,6 @@
         <v-text-field
           flat
           label="할일 추가"
-          class="hidden-sm-and-down"
           v-model="todoVal"
           @keyup.enter="insertTodo()"
         />
@@ -34,7 +33,6 @@
           <v-text-field
             flat
             label="url입력 ex) /api/test"
-            class="hidden-sm-and-down"
             style="width:300px;"
             v-model="apiUrl"
           />
@@ -77,7 +75,6 @@
         <v-text-field
           flat
           label="serverURL"
-          class="hidden-sm-and-down"
           v-model="serverURL"
         />
         <v-btn small color="primary" @click="socketConnect()">connect socket</v-btn>

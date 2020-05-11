@@ -19,17 +19,9 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <v-select
-                  :items="[10,20,30,40,50,60,70,80,90,100]"
+                  :items="[30,40,50,60,70,80,90,100]"
                   label="Width(%)*"
                   v-model="width"
-                  required
-                ></v-select>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-select
-                  :items="[100,200,300,400,500,600,700,800,900,1000]"
-                  label="Height(px)*"
-                  v-model="height"
                   required
                 ></v-select>
               </v-col>
@@ -69,7 +61,6 @@
         ],
         chartName: '',
         width: 0,
-        height: 0
       }
     },
     methods: {
@@ -78,14 +69,12 @@
           let param = {
             chartName: this.chartName,
             width: this.width,
-            height: this.height
           }
           this.$emit('modalResult',param)
         }
         // 초기화
         this.chartName = ''
         this.width = 0
-        this.height = 0
         // modal닫기
         this.modal = false
       }
