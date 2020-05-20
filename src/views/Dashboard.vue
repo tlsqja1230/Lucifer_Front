@@ -4,7 +4,7 @@
             <div class="div_top">
                 <ChartModal @modalResult="modalResult"></ChartModal>
             </div>
-            <div v-for="(item, index) in chartList" :key="index" :style="{width:$common.isMobile()? '100%' : item.width+'%'}">
+            <div class="ma-1" v-for="(item, index) in chartList" :key="index" :style="{width:$common.isMobile()? '100%' : item.width+'%'}">
                 <v-card>
                     <v-toolbar color="transparent" flat dense>
                         <v-toolbar-title>
@@ -19,7 +19,7 @@
                         <GaugeChart v-if="item.chartName === 'CPU'" :series="cpuData"></GaugeChart>
                         <ScatterChart v-if="item.chartName === 'XLOG'" :series="xlogData"></ScatterChart>
                         <LineChart v-if="item.chartName === 'TPS'" :series="tpsData"></LineChart>
-                        <ScatterChart v-if="item.chartName === 'ERROR RATE'" :series="errorRateData"></ScatterChart>
+                        <RealTimeLineChart v-if="item.chartName === 'ERROR RATE'" :series="recvList"></RealTimeLineChart>
                         <ScatterChart v-if="item.chartName === 'ACTIVE SERVICE'" :series="activeServiceData"></ScatterChart>
                         <!-- 차트영역 end -->
                     </v-card-text>
@@ -34,13 +34,15 @@ import ChartModal from '@/components/common/ChartModal.vue'
 import GaugeChart from '@/components/common/GaugeChart.vue'
 import ScatterChart from '@/components/common/ScatterChart.vue'
 import LineChart from '@/components/common/LineChart.vue'
+import RealTimeLineChart from '@/components/common/RealTimeLineChart.vue'
 export default {
     name: 'Dashboard',
     components: {
         ChartModal,
         GaugeChart,
         ScatterChart,
-        LineChart
+        LineChart,
+        RealTimeLineChart
     },
     props: {
     },
@@ -56,7 +58,10 @@ export default {
             xlogData: [], //xlog데이터
             tpsData: [], //tps데이터
             errorRateData: [], //errorRate데이터
-            activeServiceData: [] //activeService데이터
+            activeServiceData: [], //activeService데이터
+            //socket
+            serverURL: 'http://ec2-15-165-126-152.ap-northeast-2.compute.amazonaws.com:8080/websocket',
+            recvList: []
         }
     },
     beforeRouteEnter (to, from, next) {
@@ -69,6 +74,7 @@ export default {
         this.tpsData = [{"name":"South","data":[[1486738800000,39],[1486825200000,30],[1486911600000,10],[1486998000000,25],[1487084400000,33],[1487170800000,30],[1487257200000,38],[1487343600000,11],[1487430000000,25],[1487516400000,59],[1487602800000,44],[1487689200000,36],[1487775600000,32],[1487862000000,13],[1487948400000,12],[1488034800000,33],[1488121200000,43],[1488207600000,36],[1488294000000,53],[1488380400000,17]]},{"name":"North","data":[[1486738800000,14],[1486825200000,18],[1486911600000,13],[1486998000000,11],[1487084400000,14],[1487170800000,14],[1487257200000,10],[1487343600000,15],[1487430000000,12],[1487516400000,16],[1487602800000,19],[1487689200000,14],[1487775600000,16],[1487862000000,12],[1487948400000,10],[1488034800000,14],[1488121200000,19],[1488207600000,15],[1488294000000,10],[1488380400000,13]]},{"name":"Central","data":[[1486738800000,10],[1486825200000,14],[1486911600000,11],[1486998000000,13],[1487084400000,14],[1487170800000,15],[1487257200000,13],[1487343600000,15],[1487430000000,14],[1487516400000,10],[1487602800000,13],[1487689200000,14],[1487775600000,12],[1487862000000,12],[1487948400000,11],[1488034800000,15],[1488121200000,14],[1488207600000,13],[1488294000000,11],[1488380400000,15]]}]
     },
     mounted() {
+        this.socketConnect()
     },
     updated() {
     },
@@ -76,13 +82,36 @@ export default {
         modalResult(result){
             let obj = {
                 chartName: result.chartName,
-                width: result.width
+                width: result.width-0.5
             }
             this.chartList.push(obj)
         },
         deleteChart(index){
             this.chartList.splice(index,1);
-        }
+        },
+        socketConnect() {
+            let socket = new this.$sockjs(this.serverURL);
+            this.stompClient = this.$webstomp.over(socket);
+            this.stompClient.connect({}, frame => {
+                // 소켓 연결 성공
+                this.connected = true;
+                console.log('소켓 연결 성공', frame);
+                // 서버의 메시지 전송 endpoint를 구독합니다.
+                // 이런형태를 pub sub 구조라고 합니다.
+                this.stompClient.subscribe("/chart", res => {
+                    console.log('구독으로 받은 메시지 입니다.', res.body);
+
+                    // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
+                    this.recvList.push(JSON.parse(res.body))
+                });
+            },
+            error => {
+                // 소켓 연결 실패
+                console.log('소켓 연결 실패', error);
+                this.connected = false;
+                }
+            );        
+        } 
     },
 }
 </script>
